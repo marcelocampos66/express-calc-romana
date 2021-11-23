@@ -26,6 +26,7 @@ class App {
 
   private callRoutes() {
     this.app.use('/users', this.controllers.users.router);
+    this.app.use('/calculator', this.controllers.calculator.router);
   }
 
   private handleErrors() {
