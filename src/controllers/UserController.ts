@@ -25,18 +25,22 @@ class UserController extends Middlewares {
       this.login,
     ]);
     this.router.get('/', [
+      this.validateJWT,
       this.getAllUsers,
     ]);
     this.router.get('/:id', [
-      this.verifyUserExists,
+      this.validateJWT,
+      this.verifyUserId,
       this.getUserById,
     ]);
     this.router.put('/:id', [
-      this.verifyUserExists,
+      this.validateJWT,
+      this.verifyUserId,
       this.updateUser,
     ]);
     this.router.delete('/:id', [
-      this.verifyUserExists,
+      this.validateJWT,
+      this.verifyUserId,
       this.deleteUser,
     ]);
   }
@@ -54,10 +58,14 @@ class UserController extends Middlewares {
   private login = async (
     req: Request,
     res: Response,
-    _next: NextFunction,
+    next: NextFunction,
   ) => {
     const { body: { email, password } } = req;
-    return res.status(200).json();
+    const result = await this.service.login(email, password);
+    if (!result) {
+      return next({ status: 400, message: 'Email or password incorrect.' });
+    }
+    return res.status(200).json(result);
   }
 
   private getAllUsers = async (

@@ -20,6 +20,17 @@ export class UserService {
     return this.models.users.getUserById(insertedId.toString());
   }
 
+  public async login(email: string, password: string) {
+    const hashedPassword = this.helpers.hashPassword(password);
+    const user = await this.models.users.getUserByLogin(
+      email,
+      hashedPassword,
+    );
+    if (!user) return;
+    const formatedInfos: IUserToken = this.helpers.formatUserToGetToken(user);
+    return { token: this.helpers.generateToken(formatedInfos) };
+  }
+
   public async getAllUsers() {
     return this.models.users.getAllUsers();
   }

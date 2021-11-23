@@ -39,6 +39,12 @@ class UserModel extends Connection {
       .deleteOne({ _id: new ObjectId(id) }))
   }
 
+  public async getUserByLogin(email: string, password: string) {
+    return this.connection()
+      .then((db) => db.collection('users')
+      .findOne({ email, password }));
+  }
+
 }
 
 export default UserModel;
