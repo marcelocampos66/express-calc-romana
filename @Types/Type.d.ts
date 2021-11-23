@@ -29,3 +29,9 @@ interface IPayload {
   iat: number;
   exp: number;
 }
+
+interface IRomans {
+  [key: string]: number;
+}
+
+type Op = 'sum' | 'sub';
